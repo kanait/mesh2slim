@@ -17,8 +17,10 @@ using namespace std;
 #include "NRSVD.h"
 #include "PIEM.hxx"
 
+#if _USE_MKL_
 #include <itpp/itbase.h>
 using namespace itpp;
+#endif // _USE_MKL_
 
 void PIEM::addPIEMElementsDisA( Point3d& p0, Point3d& p1, Point3d& p2 )
 {
@@ -991,6 +993,7 @@ double PIEM::error( std::vector<double>& coeff )
   return error;
 }
 
+#if _USE_MKL_
 bool PIEM::optimizeMKL( std::vector<double>& opt )
 {
   if ( !A_ ) initMatrixVec();
@@ -1061,7 +1064,8 @@ bool PIEM::optimizeMKL( std::vector<double>& opt )
     {
       // 計算に失敗
 #if defined(WIN32)
-      if ( std::_isnan( w[k] ) ) return false;
+      //if ( std::_isnan( w[k] ) ) return false;
+      if ( std::isnan( w[k] ) ) return false;
 #else
       if ( isnan( w[k] ) ) return false;
 #endif
@@ -1086,6 +1090,8 @@ bool PIEM::optimizeMKL( std::vector<double>& opt )
   return true;
 }
 
+#endif // _USE_MKL_
+
 bool PIEM::optimize( std::vector<double>& opt )
 {
   if ( !A_ ) initMatrixVec();
@@ -1108,7 +1114,8 @@ bool PIEM::optimize( std::vector<double>& opt )
     {
       // 計算に失敗
 #if defined(WIN32)
-      if ( std::_isnan( w[k] ) ) return false;
+      // if ( std::_isnan( w[k] ) ) return false;
+      if ( std::isnan( w[k] ) ) return false;
 #else
       if ( isnan( w[k] ) ) return false;
 #endif
