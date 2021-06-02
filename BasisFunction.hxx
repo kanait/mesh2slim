@@ -1,6 +1,6 @@
 ////////////////////////////////////////////////////////////////////
 //
-// $Id$
+// $Id: BasisFunction.hxx 2021/06/02 22:57:01 kanai Exp $
 //
 // Copyright (c) 2005 by RIKEN. All rights reserved. 
 //
@@ -76,11 +76,11 @@ class Cubic : public BasisFunction<T> {
 public:
 
   Cubic(){
-    resize( CUBIC_COEFF );
+    BasisFunction<T>::resize( CUBIC_COEFF );
   };
 
   ~Cubic(){
-    clear();
+    BasisFunction<T>::clear();
   };
   
 //   std::vector<T>& coeff() { return c_; };
@@ -100,7 +100,7 @@ public:
 //     if ( c.size() != CUBIC_COEFF_ALL ) return;
 
     for ( int i = 0; i < CUBIC_COEFF; ++i )
-      c[i+3] = coeff(i);
+      c[i+3] = BasisFunction<T>::coeff(i);
   };
 
 private:
@@ -122,16 +122,16 @@ private:
 #endif
 
   T poly_( T x, T y, T z ) const {
-    return ( ( (coeff(0) * x + coeff(3) * y + coeff(10)) * x + coeff(6) * y * y + coeff(13) * y + coeff(16) ) * x +
-	     ( (coeff(1) * y + coeff(4) * z + coeff(11)) * y + coeff(7) * z * z + coeff(14) * z + coeff(17) ) * y +
-	     ( (coeff(2) * z + coeff(5) * x + coeff(12)) * z + coeff(8) * x * x + coeff(15) * x + coeff(18) ) * z + 
-	     coeff(9) * x * y * z + coeff(19) );
+    return ( ( (BasisFunction<T>::coeff(0) * x + BasisFunction<T>::coeff(3) * y + BasisFunction<T>::coeff(10)) * x + BasisFunction<T>::coeff(6) * y * y + BasisFunction<T>::coeff(13) * y + BasisFunction<T>::coeff(16) ) * x +
+	     ( (BasisFunction<T>::coeff(1) * y + BasisFunction<T>::coeff(4) * z + BasisFunction<T>::coeff(11)) * y + BasisFunction<T>::coeff(7) * z * z + BasisFunction<T>::coeff(14) * z + BasisFunction<T>::coeff(17) ) * y +
+	     ( (BasisFunction<T>::coeff(2) * z + BasisFunction<T>::coeff(5) * x + BasisFunction<T>::coeff(12)) * z + BasisFunction<T>::coeff(8) * x * x + BasisFunction<T>::coeff(15) * x + BasisFunction<T>::coeff(18) ) * z + 
+	     BasisFunction<T>::coeff(9) * x * y * z + BasisFunction<T>::coeff(19) );
   };
   
   void polyG_( T g[3], T x, T y, T z ) {
-    g[0] = ( (3.0f * coeff(0) * x + 2.0f * (coeff(3) * y + coeff(10))) * x + (coeff(9) * z + coeff(6) * y + coeff(13)) * y + (2.0f * coeff(8) * x + coeff(5) * z + coeff(15)) * z + coeff(16) );
-    g[1] = ( (3.0f * coeff(1) * y + 2.0f * (coeff(4) * z + coeff(11))) * y + (coeff(9) * x + coeff(7) * z + coeff(14)) * z + (2.0f * coeff(6) * y + coeff(3) * x + coeff(13)) * x + coeff(17) );
-    g[2] = ( (3.0f * coeff(2) * z + 2.0f * (coeff(5) * x + coeff(12))) * z + (coeff(9) * y + coeff(8) * x + coeff(15)) * x + (2.0f * coeff(7) * z + coeff(4) * y + coeff(14)) * y + coeff(18) );
+    g[0] = ( (3.0f * BasisFunction<T>::coeff(0) * x + 2.0f * (BasisFunction<T>::coeff(3) * y + BasisFunction<T>::coeff(10))) * x + (BasisFunction<T>::coeff(9) * z + BasisFunction<T>::coeff(6) * y + BasisFunction<T>::coeff(13)) * y + (2.0f * BasisFunction<T>::coeff(8) * x + BasisFunction<T>::coeff(5) * z + BasisFunction<T>::coeff(15)) * z + BasisFunction<T>::coeff(16) );
+    g[1] = ( (3.0f * BasisFunction<T>::coeff(1) * y + 2.0f * (BasisFunction<T>::coeff(4) * z + BasisFunction<T>::coeff(11))) * y + (BasisFunction<T>::coeff(9) * x + BasisFunction<T>::coeff(7) * z + BasisFunction<T>::coeff(14)) * z + (2.0f * BasisFunction<T>::coeff(6) * y + BasisFunction<T>::coeff(3) * x + BasisFunction<T>::coeff(13)) * x + BasisFunction<T>::coeff(17) );
+    g[2] = ( (3.0f * BasisFunction<T>::coeff(2) * z + 2.0f * (BasisFunction<T>::coeff(5) * x + BasisFunction<T>::coeff(12))) * z + (BasisFunction<T>::coeff(9) * y + BasisFunction<T>::coeff(8) * x + BasisFunction<T>::coeff(15)) * x + (2.0f * BasisFunction<T>::coeff(7) * z + BasisFunction<T>::coeff(4) * y + BasisFunction<T>::coeff(14)) * y + BasisFunction<T>::coeff(18) );
   };
 
 };
@@ -145,11 +145,11 @@ class Quadratic : public BasisFunction<T> {
 public:
 
   Quadratic(){
-    resize( QUADRATIC_COEFF );
+    BasisFunction<T>::resize( QUADRATIC_COEFF );
   };
 
   ~Quadratic(){
-    clear();
+    BasisFunction<T>::clear();
   };
 
 //   std::vector<T>& coeff() { return c_; };
@@ -177,7 +177,7 @@ public:
     //if ( c.size() != QUADRATIC_COEFF_ALL ) return;
 
     for ( int i = 0; i < QUADRATIC_COEFF; ++i )
-      c[i+3] = coeff(i);
+      c[i+3] = BasisFunction<T>::coeff(i);
   };
 
   friend std::ostream& operator <<( std::ostream& o, const Quadratic<T>& q ) {
@@ -204,15 +204,15 @@ private:
 #endif
   
   T poly_( T x, T y, T z ) const {
-    return ( (coeff(0) * x + coeff(3) * y + coeff(6)) * x + 
-	     (coeff(1) * y + coeff(4) * z + coeff(7)) * y + 
-	     (coeff(2) * z + coeff(5) * x + coeff(8)) * z + coeff(9) );
+    return ( (BasisFunction<T>::coeff(0) * x + BasisFunction<T>::coeff(3) * y + BasisFunction<T>::coeff(6)) * x + 
+	     (BasisFunction<T>::coeff(1) * y + BasisFunction<T>::coeff(4) * z + BasisFunction<T>::coeff(7)) * y + 
+	     (BasisFunction<T>::coeff(2) * z + BasisFunction<T>::coeff(5) * x + BasisFunction<T>::coeff(8)) * z + BasisFunction<T>::coeff(9) );
   };
   
   void polyG_( T g[3], T x, T y, T z ) {
-    g[0] = 2.0f * coeff(0) * x + coeff(3) * y + coeff(5) * z + coeff(6);
-    g[1] = 2.0f * coeff(1) * y + coeff(4) * z + coeff(3) * x + coeff(7);
-    g[2] = 2.0f * coeff(2) * z + coeff(5) * x + coeff(4) * y + coeff(8);
+    g[0] = 2.0f * BasisFunction<T>::coeff(0) * x + BasisFunction<T>::coeff(3) * y + BasisFunction<T>::coeff(5) * z + BasisFunction<T>::coeff(6);
+    g[1] = 2.0f * BasisFunction<T>::coeff(1) * y + BasisFunction<T>::coeff(4) * z + BasisFunction<T>::coeff(3) * x + BasisFunction<T>::coeff(7);
+    g[2] = 2.0f * BasisFunction<T>::coeff(2) * z + BasisFunction<T>::coeff(5) * x + BasisFunction<T>::coeff(4) * y + BasisFunction<T>::coeff(8);
   };
 
 };
@@ -226,11 +226,11 @@ class Linear : public BasisFunction<T> {
 public:
 
   Linear(){
-    resize( LINEAR_COEFF );
+    BasisFunction<T>::resize( LINEAR_COEFF );
   };
 
   ~Linear(){
-    clear();
+    BasisFunction<T>::clear();
   };
 
 //   std::vector<T>& coeff() { return c_; };
@@ -247,7 +247,7 @@ public:
 //     if ( c.size() != LINEAR_COEFF_ALL ) return;
 
     for ( int i = 0; i < LINEAR_COEFF; ++i )
-      c[i+3] = coeff(i);
+      c[i+3] = BasisFunction<T>::coeff(i);
   };
 
 private:
@@ -264,13 +264,13 @@ private:
 #endif
   
   T poly_( T x, T y, T z ) const {
-    return coeff(0) * x + coeff(1) * y + coeff(2) * z + coeff(3);
+    return BasisFunction<T>::coeff(0) * x + BasisFunction<T>::coeff(1) * y + BasisFunction<T>::coeff(2) * z + BasisFunction<T>::coeff(3);
   };
   
   void polyG_( T g[3], T x, T y, T z ) {
-    g[0] = coeff(0);
-    g[1] = coeff(1);
-    g[2] = coeff(2);
+    g[0] = BasisFunction<T>::coeff(0);
+    g[1] = BasisFunction<T>::coeff(1);
+    g[2] = BasisFunction<T>::coeff(2);
   };
 
 };

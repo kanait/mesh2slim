@@ -1,6 +1,6 @@
 ////////////////////////////////////////////////////////////////////
 //
-// $Id$
+// $Id: MeshRDG.hxx 2021/06/02 22:58:56 kanai Exp $
 //
 // Dual Graph class for MeshR
 //
@@ -309,7 +309,7 @@ public:
   void createDG() {
     std::cout << "create Dual Graph ..." << endl;
 
-    std::vector<int>& face_mates = mesh().face_mates();
+    std::vector<int>& face_mates = MeshRApp<T>::mesh().face_mates();
 
     // create nodes
     for ( int i = 0; i < face_mates.size(); i += TRIANGLE )
@@ -327,7 +327,7 @@ public:
 	unsigned int id = (int) ((float) i / 3.0f);
 
 	unsigned int m[TRIANGLE];
-	mesh().getFaceMates( id, m );
+	MeshRApp<T>::mesh().getFaceMates( id, m );
 //  	cout << m[0] << " " << m[1] << " " << m[2] << endl;
 // 	m[0] = (int) ((float) face_mates[i] / 3.0f);
 // 	m[1] = (int) ((float) face_mates[i+1] / 3.0f);
@@ -372,7 +372,7 @@ public:
 	
 // 	cout << "bb" << endl;
 
-	if ( mesh().checkFaceNormal( face_id ) ) 
+	if ( MeshRApp<T>::mesh().checkFaceNormal( face_id ) ) 
 	  continue;
 
 	// k‘Ş‚µ‚Ä‚¢‚éê‡, ƒƒCƒg‚Ì–Ê“¯m‚ğ‚­‚Á‚Â‚¯‚é

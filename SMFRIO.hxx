@@ -1,6 +1,6 @@
 ////////////////////////////////////////////////////////////////////
 //
-// $Id: $
+// $Id: SMFRIO.hxx 2021/06/02 23:03:38 kanai Exp $
 //
 // Copyright (c) 2005 by Takashi Kanai. All rights reserved. 
 //
@@ -73,8 +73,8 @@ public:
 	    if ( !r_count )
 	      {
 		int wc = strutil.word_count( cline );
-		if ( wc == 3 ) mesh().setNTex( 2 );
-		else mesh().setNTex( 3 );
+		if ( wc == 3 ) RIO<T>::mesh().setNTex( 2 );
+		else RIO<T>::mesh().setNTex( 3 );
 	      }
 	    ++r_count;
 	  }
@@ -108,13 +108,13 @@ public:
 
     std::cout << "read data .. " << std::endl;
 
-    if ( v_count )  mesh().reservePoints(    v_count );
-    if ( n_count )  mesh().reserveNormals(   n_count );
-    if ( r_count )  mesh().reserveTexcoords( r_count, mesh().n_tex() );
-    if ( c_count )  mesh().reserveColors(    c_count );
-    if ( cf_count ) mesh().reserveColorIds(  cf_count );
-    if ( f_count )  mesh().reserveIndices(   f_count );
-    if ( fm_count )  mesh().reserveFaceMates(   fm_count );
+    if ( v_count )  RIO<T>::mesh().reservePoints(    v_count );
+    if ( n_count )  RIO<T>::mesh().reserveNormals(   n_count );
+    if ( r_count )  RIO<T>::mesh().reserveTexcoords( r_count, RIO<T>::mesh().n_tex() );
+    if ( c_count )  RIO<T>::mesh().reserveColors(    c_count );
+    if ( cf_count ) RIO<T>::mesh().reserveColorIds(  cf_count );
+    if ( f_count )  RIO<T>::mesh().reserveIndices(   f_count );
+    if ( fm_count )  RIO<T>::mesh().reserveFaceMates(   fm_count );
 
   
     // 2nd try
@@ -167,7 +167,7 @@ public:
 	    T z = atof( zc );
 #endif
 
-	    mesh().setPoint( v_id, x, y, z );
+	    RIO<T>::mesh().setPoint( v_id, x, y, z );
 	    v_id += nXYZ;
 	  }
 
@@ -193,7 +193,7 @@ public:
 	    T z = atof( zc );
 #endif
 
-	    mesh().setNormal( n_id, x, y, z );
+	    RIO<T>::mesh().setNormal( n_id, x, y, z );
 	    n_id += nXYZ;
 	  }
 
@@ -203,22 +203,22 @@ public:
 	    char dummy[BUFSIZ];
 	    char xc[BUFSIZ], yc[BUFSIZ], zc[BUFSIZ];
 	    T x, y, z;
-	    if ( mesh().n_tex() == 2 )
+	    if ( RIO<T>::mesh().n_tex() == 2 )
 	      {
 		sscanf( cline.c_str(), "%s%s%s", &dummy, &xc, &yc );
 		x = atof( xc );
 		y = atof( yc );
-		mesh().setTexcoord( r_id, x, y );
+		RIO<T>::mesh().setTexcoord( r_id, x, y );
 	      }
-	    else if ( mesh().n_tex() == 3 )
+	    else if ( RIO<T>::mesh().n_tex() == 3 )
 	      {
 		sscanf( cline.c_str(), "%s%s%s%s", &dummy, &xc, &yc, &zc );
 		x = atof( xc );
 		y = atof( yc );
 		z = atof( zc );
-		mesh().setTexcoord( r_id, x, y, z );
+		RIO<T>::mesh().setTexcoord( r_id, x, y, z );
 	      }
-	    r_id += mesh().n_tex();
+	    r_id += RIO<T>::mesh().n_tex();
 	  }
 
 	// binding types
@@ -227,9 +227,9 @@ public:
 	    std::string s;
 	    strutil.nth_word( cline, 3, s );
 	    if ( !s.compare("vertex") )
-	      mesh().setColorAssigned( ASSIGN_VERTEX );
+	      RIO<T>::mesh().setColorAssigned( ASSIGN_VERTEX );
 	    else if ( !s.compare("face") )
-	      mesh().setColorAssigned( ASSIGN_FACE );
+	      RIO<T>::mesh().setColorAssigned( ASSIGN_FACE );
 	  }
 
 	// colors
@@ -242,7 +242,7 @@ public:
 	    T y = atof( yc );
 	    T z = atof( zc );
 
-	    mesh().setColor( c_id, x, y, z );
+	    RIO<T>::mesh().setColor( c_id, x, y, z );
 	    c_id += nXYZ;
 	  }
 
@@ -254,7 +254,7 @@ public:
 	    sscanf( cline.c_str(), "%s%s", &dummy, &ids );
 	    unsigned int id = atoi( ids );
 
-	    mesh().setColorId( cf_id, id );
+	    RIO<T>::mesh().setColorId( cf_id, id );
 	    ++ cf_id;
 	  }
       
@@ -281,7 +281,7 @@ public:
 		    unsigned int id;
 		    std::istringstream ai(val); ai >> id0;
 		    id = id0 - 1;
-		    mesh().setIndex( f_id, id );
+		    RIO<T>::mesh().setIndex( f_id, id );
 	      
 		    ++f_id;
 	      
@@ -299,9 +299,9 @@ public:
 		unsigned int id0 = atoi( xc ) - 1;
 		unsigned int id1 = atoi( yc ) - 1;
 		unsigned int id2 = atoi( zc ) - 1;
-		mesh().setIndex( f_id, id0 ); ++f_id;
-		mesh().setIndex( f_id, id1 ); ++f_id;
-		mesh().setIndex( f_id, id2 ); ++f_id;
+		RIO<T>::mesh().setIndex( f_id, id0 ); ++f_id;
+		RIO<T>::mesh().setIndex( f_id, id1 ); ++f_id;
+		RIO<T>::mesh().setIndex( f_id, id2 ); ++f_id;
 	      }
 	  }
 	else if ( !fw.compare("fm") )
@@ -313,9 +313,9 @@ public:
 	    unsigned int id1 = atoi( yc ) - 1;
 	    unsigned int id2 = atoi( zc ) - 1;
 // 	    cout << id0 << " " << id1 << " " << id2 << endl;
-	    mesh().setFaceMate( fm_id, id0 * TRIANGLE ); ++fm_id;
-	    mesh().setFaceMate( fm_id, id1 * TRIANGLE ); ++fm_id;
-	    mesh().setFaceMate( fm_id, id2 * TRIANGLE ); ++fm_id;
+	    RIO<T>::mesh().setFaceMate( fm_id, id0 * TRIANGLE ); ++fm_id;
+	    RIO<T>::mesh().setFaceMate( fm_id, id1 * TRIANGLE ); ++fm_id;
+	    RIO<T>::mesh().setFaceMate( fm_id, id2 * TRIANGLE ); ++fm_id;
 	  }
       
       } // while
@@ -325,7 +325,7 @@ public:
 
     ifs.close();
 
-    mesh().printInfo();
+    RIO<T>::mesh().printInfo();
   
     return true;
   };
@@ -333,9 +333,9 @@ public:
   bool outputToFile( const char* const filename,
 		     bool isSaveNormal,
 		     bool isSaveTexcoord, bool isSaveBLoop ) {
-    setSaveNormal( isSaveNormal );
-    setSaveTexcoord( isSaveTexcoord );
-    setSaveBLoop( isSaveBLoop );
+    RIO<T>::setSaveNormal( isSaveNormal );
+    RIO<T>::setSaveTexcoord( isSaveTexcoord );
+    RIO<T>::setSaveBLoop( isSaveBLoop );
     return outputToFile( filename );
   };
   bool outputToFile( const char* const filename ) {
@@ -343,38 +343,38 @@ public:
 
     std::cout << "Output to file: " << filename << endl;
 
-    mesh().printInfo();
+    RIO<T>::mesh().printInfo();
 
     // header
   
     ofs << "#$SMF 1.0" << std::endl;
 
-    int vn = (int) ((float) mesh().points().size() / (float) nXYZ);
+    int vn = (int) ((float) RIO<T>::mesh().points().size() / (float) nXYZ);
     ofs << "#$vertices " << vn << std::endl;
 
-    int nn = (int) ((float) mesh().normals().size() / (float) nXYZ);
-    if ( nn && isSaveNormal() )
+    int nn = (int) ((float) RIO<T>::mesh().normals().size() / (float) nXYZ);
+    if ( nn && RIO<T>::isSaveNormal() )
       ofs << "#$normals " << nn << std::endl;
 
-    int tn = (int) ((float) mesh().texcoords().size() / (float) mesh().n_tex());
-    if ( tn && isSaveTexcoord() )
+    int tn = (int) ((float) RIO<T>::mesh().texcoords().size() / (float) RIO<T>::mesh().n_tex());
+    if ( tn && RIO<T>::isSaveTexcoord() )
       ofs << "#$texcoords " << tn << std::endl;
 
-    int cn  = (int) ((float) mesh().colors().size() / (float) nXYZ);
-    int cin = mesh().color_ids().size();
-    if ( cn && isSaveColor() )
+    int cn  = (int) ((float) RIO<T>::mesh().colors().size() / (float) nXYZ);
+    int cin = RIO<T>::mesh().color_ids().size();
+    if ( cn && RIO<T>::isSaveColor() )
       {
 	ofs << "#$colors " << cn << std::endl;
 	if ( cin ) ofs << "#$color_ids " << cin << std::endl;
       }
 
-    int fn = (int) ((float) mesh().indices().size() / (float) TRIANGLE);
+    int fn = (int) ((float) RIO<T>::mesh().indices().size() / (float) TRIANGLE);
     ofs << "#$faces " << fn << std::endl;
     ofs << "#" << std::endl;
 
     if ( vn )
       {
-	std::vector<T>& points = mesh().points();
+	std::vector<T>& points = RIO<T>::mesh().points();
 	for ( int i = 0; i < vn; ++i )
 	  {
 	    ofs << "v\t"
@@ -384,9 +384,9 @@ public:
 	  }
       }
 
-    if ( nn && isSaveNormal() )
+    if ( nn && RIO<T>::isSaveNormal() )
       {
-	std::vector<T>& normals = mesh().normals();
+	std::vector<T>& normals = RIO<T>::mesh().normals();
 	for ( int i = 0; i < nn; ++i )
 	  {
 	    ofs << "n\t"
@@ -396,10 +396,10 @@ public:
 	  }
       }
 
-    if ( tn && isSaveTexcoord() )
+    if ( tn && RIO<T>::isSaveTexcoord() )
       {
-	int n_tex = mesh().n_tex();
-	std::vector<T>& texcoords = mesh().texcoords();
+	int n_tex = RIO<T>::mesh().n_tex();
+	std::vector<T>& texcoords = RIO<T>::mesh().texcoords();
 	for ( int i = 0; i < tn; ++i )
 	  {
 	    ofs << "r\t"
@@ -413,19 +413,19 @@ public:
 	  }
       }
 
-    if ( cn && isSaveColor() )
+    if ( cn && RIO<T>::isSaveColor() )
       {
-	if ( mesh().colorAssigned() == ASSIGN_VERTEX )
+	if ( RIO<T>::mesh().colorAssigned() == ASSIGN_VERTEX )
 	  {
 	    ofs << "bind c vertex" << std::endl;
 	  }
-	else if ( mesh().colorAssigned() == ASSIGN_FACE )
+	else if ( RIO<T>::mesh().colorAssigned() == ASSIGN_FACE )
 	  {
 	    ofs << "bind c face" << std::endl;
 	  }
 
 	// color
-	std::vector<T>& colors = mesh().colors();
+	std::vector<T>& colors = RIO<T>::mesh().colors();
 	for ( int i = 0; i < cn; ++i )
 	  {
 	    ofs << "c\t"
@@ -435,7 +435,7 @@ public:
 	  }
 
 	// color id
-	std::vector<unsigned int>& color_ids = mesh().color_ids();
+	std::vector<unsigned int>& color_ids = RIO<T>::mesh().color_ids();
 	for ( int i = 0; i < cin; ++i )
 	  {
 	    ofs << "cf\t" << color_ids[i] << endl;
@@ -444,7 +444,7 @@ public:
 
     if ( fn )
       {
-	std::vector<unsigned int>& indices = mesh().indices();
+	std::vector<unsigned int>& indices = RIO<T>::mesh().indices();
 	for ( int i = 0; i < fn; ++i )
 	  {
 	    ofs << "f\t" ;
@@ -452,8 +452,8 @@ public:
 	      {
 		unsigned int id = indices[ TRIANGLE * i + j ] + 1;
 		ofs << id;
-		if ( nn && isSaveNormal() )   ofs << "/" << id;
-		if ( tn && isSaveTexcoord() ) ofs << "/" << id;
+		if ( nn && RIO<T>::isSaveNormal() )   ofs << "/" << id;
+		if ( tn && RIO<T>::isSaveTexcoord() ) ofs << "/" << id;
 		ofs << " " ;
 	      }
 	    ofs << std::endl;
