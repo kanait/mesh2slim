@@ -1,8 +1,8 @@
 ////////////////////////////////////////////////////////////////////
 //
-// $Id$
+// $Id: PIEM.cxx 2021/06/03 02:48:55 kanai Exp $
 //
-// Copyright (c) 2005 by RIKEN. All rights reserved. 
+// Copyright (c) by Takashi Kanai. All rights reserved. 
 //
 ////////////////////////////////////////////////////////////////////
 
@@ -11,16 +11,24 @@
 #endif
 
 #include <cmath>
-
 using namespace std;
 
+// #define _USE_NR_ 0
+#ifdef _USE_NR_
 #include "NRSVD.h"
-#include "PIEM.hxx"
+#endif
+
+#define _USE_EIGEN_ 1
+#ifdef _USE_EIGEN_
+#include <Eigen/Dense>
+#endif
 
 #if _USE_MKL_
 #include <itpp/itbase.h>
 using namespace itpp;
 #endif // _USE_MKL_
+
+#include "PIEM.hxx"
 
 void PIEM::addPIEMElementsDisA( Point3d& p0, Point3d& p1, Point3d& p2 )
 {
@@ -1092,6 +1100,84 @@ bool PIEM::optimizeMKL( std::vector<double>& opt )
 
 #endif // _USE_MKL_
 
+/////////////////////////////////////////////////////////////////////////////////////////////////////
+
+#ifdef _USE_EIGEN_
+
+bool PIEM::optimize( std::vector<double>& opt )
+{
+  if ( !A_ ) initMatrixVec();
+
+  // set Matrix and Vector
+  copyPIEMToMatrixVec();
+
+  Eigen::MatrixXd A1( NUM_VEC-1, NUM_VEC-1 );
+  for ( int i = 1; i < NUM_VEC; ++i )
+    {
+      for ( int j = 1; j < NUM_VEC; ++j )
+        {
+          A1(i-1,j-1) = A_[i][j];
+        }
+    }
+
+  Eigen::VectorXd b1( NUM_VEC-1 );
+  for ( int i = 1; i < NUM_VEC; ++i )
+    {
+      b1[i-1] = b_[i];
+    }
+
+#if 0
+  Eigen::JacobiSVD<Eigen::MatrixXd> svd(A1, Eigen::ComputeFullU | Eigen::ComputeFullV);
+  Eigen::VectorXd x1 = svd.solve(b1);
+#endif
+#if 1
+  Eigen::VectorXd x1 = A1.bdcSvd( Eigen::ComputeThinU | Eigen::ComputeThinV ).solve(b1);
+#endif
+
+  for ( int i = 0; i < NUM_VEC-1; ++i )
+    opt[i] = x1[i];
+
+#if 0
+  
+  double wmax=0.0f;
+  for (int k = 1; k < NUM_VEC; ++k )
+    {
+      // 計算に失敗
+#if defined(WIN32)
+      // if ( std::_isnan( w[k] ) ) return false;
+      if ( std::isnan( w[k] ) ) return false;
+#else
+      if ( isnan( w[k] ) ) return false;
+#endif
+      if ( std::fabs(w[k]) > wmax ) wmax = std::fabs(w[k]);
+    }
+
+  double wmin=wmax*0.000001f;
+  for (int k = 1; k < NUM_VEC; ++k )
+    if ( std::fabs(w[k]) < wmin ) w[k] = 0.;
+  
+  std::vector<double> x( NUM_VEC );
+  NRSVD::svbksb( A_, &w[0], v, 10, 10, &b_[0], &x[0] );
+
+  for ( int i = 0; i < NUM_VEC - 1; ++i )
+    opt[i] = x[i+1];
+
+  for ( int i = 1; i < NUM_VEC; ++i ) delete v[i];
+  delete v;
+
+#endif
+
+  clearMatrixVec();
+
+  return true;
+}
+
+#endif // _USE_EIGEN_
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////
+
+#ifdef _USE_NR_
+
 bool PIEM::optimize( std::vector<double>& opt )
 {
   if ( !A_ ) initMatrixVec();
@@ -1139,6 +1225,8 @@ bool PIEM::optimize( std::vector<double>& opt )
 
   return true;
 }
+
+#endif // _USE_NR_
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////
 

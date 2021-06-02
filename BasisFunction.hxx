@@ -1,6 +1,6 @@
 ////////////////////////////////////////////////////////////////////
 //
-// $Id: BasisFunction.hxx 2021/06/02 22:57:01 kanai Exp $
+// $Id: BasisFunction.hxx 2021/06/03 02:43:15 kanai Exp $
 //
 // Copyright (c) 2005 by RIKEN. All rights reserved. 
 //
@@ -93,7 +93,7 @@ public:
     //if ( c.size() != CUBIC_COEFF_ALL ) return;
 
     for ( int i = 3; i < CUBIC_COEFF_ALL-1; ++i )
-      setCoeff( i-3, c[i] );
+      BasisFunction<T>::setCoeff( i-3, c[i] );
   };
   void getCoeffs( std::vector<T>& c ) {
 
@@ -169,7 +169,7 @@ public:
 //     if ( c.size() != QUADRATIC_COEFF_ALL ) return;
     
     for ( int i = 3; i < QUADRATIC_COEFF_ALL-1; ++i )
-      setCoeff( i-3, c[i] );
+      BasisFunction<T>::setCoeff( i-3, c[i] );
   };
   
   void getCoeffs( std::vector<T>& c ) {
@@ -240,7 +240,7 @@ public:
 //     if ( c.size() != LINEAR_COEFF_ALL ) return;
 
     for ( int i = 3; i < LINEAR_COEFF_ALL-1; ++i )
-      setCoeff( i-3, c[i] );
+      BasisFunction<T>::setCoeff( i-3, c[i] );
   };
   void getCoeffs( std::vector<T>& c ) {
 
