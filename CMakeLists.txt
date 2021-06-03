@@ -13,8 +13,6 @@ add_executable( mesh2slim
                 MeshR.hxx
                 MeshRApp.hxx
                 MeshRDG.hxx
-                NRSVD.cpp
-                NRSVD.h
                 PIEM.cxx
                 PIEM.hxx
                 PIEMHandler.hxx
@@ -26,9 +24,13 @@ add_executable( mesh2slim
                 SlimTree.hxx
                 SlimTreeApp.hxx
                 SlimTreeIO.hxx
-                jacobi.h
+                envDep.h
                 mesh2slim.cxx
-                nrutil.h            
+                mydef.h
+                pq.h
+                strutil.h
+                timer.hxx
+                tokenizer.h
 )
 
 target_include_directories( mesh2slim
