@@ -1,8 +1,10 @@
 # mesh2slim
 
-mesh2slim is a research code for hierarchical approximation of SLIM surfaces from polygonal meshes, which includes an implementation of the following paper:
+mesh2slim is a research code for hierarchical approximation of *SLIM* surfaces from polygonal meshes, which includes an implementation of the following paper:
 
-Takashi Kanai, Yutaka Ohtake, Kiwamu Kase: “Hierarchical Error-Driven Approximation of Implicit Surfaces from Polygonal Meshes”, Proc. 4th Eurographics/ACM SIGGRAPH Symposium on Geometry Processing, pp.21-30, 2006.
+Takashi Kanai, Yutaka Ohtake, Kiwamu Kase: ``Hierarchical Error-Driven Approximation of Implicit Surfaces from Polygonal Meshes'', Proc. 4th Eurographics/ACM SIGGRAPH Symposium on Geometry Processing, pp.21-30, 2006.
+
+*[SLIM](https://dl.acm.org/doi/10.5555/1281920.1281944) (Sparse Low-degree IMplicits) is an implicit surface representation delivering an accurate approximation to a set of points scattered over a smooth surface.*
 
 This software was originally developed in 2005-2006 and was renovated in 2021 so as to build successfully on CMake environment.
 
