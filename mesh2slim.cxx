@@ -1,6 +1,6 @@
 ////////////////////////////////////////////////////////////////////
 //
-// $Id$
+// $Id: mesh2slim.cxx 2021/06/04 16:33:15 kanai Exp $
 //
 // Copyright (c) 2005 by RIKEN. All rights reserved. 
 //
@@ -24,7 +24,7 @@ int main( int argc, char* argv[] )
 {
   if ( argc != 3 )
     {
-      std::cerr << "Usage: " << argv[0] << " in.smf(vobj) out.slim2t " << std::endl;
+      std::cerr << "Usage: " << argv[0] << " in.obj out.slim2t " << std::endl;
       exit( -1 );
     }
 

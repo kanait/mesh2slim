@@ -34,12 +34,13 @@ add_executable( mesh2slim
 )
 
 target_include_directories( mesh2slim
-                            PRIVATE
+                            PUBLIC
                             ${PROJECT_SOURCE_DIR}/external/vecmath-cpp
                             ${PROJECT_SOURCE_DIR}/external/eigen
 )
 
-target_compile_features( mesh2slim PRIVATE cxx_std_11 )
+target_compile_options( mesh2slim PUBLIC -O3 -Wall)
+target_compile_features( mesh2slim PUBLIC cxx_std_11 )
 
 target_link_libraries( mesh2slim
                        LINK_PUBLIC
