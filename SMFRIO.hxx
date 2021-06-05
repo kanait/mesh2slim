@@ -1,8 +1,9 @@
 ////////////////////////////////////////////////////////////////////
 //
-// $Id: SMFRIO.hxx 2021/06/02 23:03:38 kanai Exp $
+// $Id: SMFRIO.hxx 2021/06/05 12:41:54 kanai Exp $
 //
-// Copyright (c) 2005 by Takashi Kanai. All rights reserved. 
+// Copyright (c) 2021 Takashi Kanai
+// Released under the MIT license
 //
 ////////////////////////////////////////////////////////////////////
 

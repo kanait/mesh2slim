@@ -1,10 +1,11 @@
 ////////////////////////////////////////////////////////////////////
 //
-// $Id$
+// $Id: PIEMHandler.hxx 2021/06/05 12:40:00 kanai Exp $
 //
 // Polygon-Implicit Error Metric Handling class
 //
-// Copyright (c) 2005 by RIKEN. All rights reserved. 
+// Copyright (c) 2021 Takashi Kanai
+// Released under the MIT license
 //
 ////////////////////////////////////////////////////////////////////
 

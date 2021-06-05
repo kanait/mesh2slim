@@ -1,10 +1,11 @@
 ////////////////////////////////////////////////////////////////////
 //
-// $Id: MeshR.hxx,v 1.1 2004/01/24 16:49:07 kanai Exp $
+// $Id: MeshR.hxx 2021/06/05 12:38:07 kanai Exp $
 //
 // Mesh class for Rendering (double)
 //
-// Copyright (c) 2005 by Takashi Kanai. All rights reserved. 
+// Copyright (c) 2021 Takashi Kanai
+// Released under the MIT license
 //
 ////////////////////////////////////////////////////////////////////
 

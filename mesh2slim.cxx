@@ -1,8 +1,9 @@
 ////////////////////////////////////////////////////////////////////
 //
-// $Id: mesh2slim.cxx 2021/06/04 16:33:15 kanai Exp $
+// $Id: mesh2slim.cxx 2021/06/05 12:37:39 kanai Exp $
 //
-// Copyright (c) 2005 by RIKEN. All rights reserved. 
+// Copyright (c) 2021 Takashi Kanai
+// Released under the MIT license
 //
 ////////////////////////////////////////////////////////////////////
 

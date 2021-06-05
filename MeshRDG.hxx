@@ -1,15 +1,11 @@
 ////////////////////////////////////////////////////////////////////
 //
-// $Id: MeshRDG.hxx 2021/06/02 22:58:56 kanai Exp $
+// $Id: MeshRDG.hxx 2021/06/05 12:38:51 kanai Exp $
 //
 // Dual Graph class for MeshR
 //
-// Dual Graph クラス
-//
-//  頂点: 面, エッジ: 面のメイト に対応
-//  
-//
-// Copyright (c) 2005-2006 by Takashi Kanai. All rights reserved. 
+// Copyright (c) 2021 Takashi Kanai
+// Released under the MIT license
 //
 ////////////////////////////////////////////////////////////////////
 

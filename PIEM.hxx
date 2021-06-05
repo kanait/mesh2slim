@@ -1,10 +1,11 @@
 ////////////////////////////////////////////////////////////////////
 //
-// $Id$
+// $Id: PIEM.hxx 2021/06/05 12:39:35 kanai Exp $
 //
 // Polygon-Implicit Error Metric class
 //
-// Copyright (c) 2005 by RIKEN. All rights reserved. 
+// Copyright (c) 2021 Takashi Kanai
+// Released under the MIT license
 //
 ////////////////////////////////////////////////////////////////////
 
