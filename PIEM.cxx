@@ -1105,6 +1105,27 @@ bool PIEM::optimizeMKL( std::vector<double>& opt )
 
 #ifdef _USE_EIGEN_
 
+namespace {
+template <int Options, typename Mat>
+auto bdcSvdSolveCompat(const Mat& A, const Eigen::VectorXd& b, int)
+  -> decltype(A.template bdcSvd<Options>().solve(b))
+{
+  return A.template bdcSvd<Options>().solve(b);
+}
+
+template <int Options, typename Mat>
+Eigen::VectorXd bdcSvdSolveCompat(const Mat& A, const Eigen::VectorXd& b, long)
+{
+  return A.bdcSvd(Options).solve(b);
+}
+
+template <int Options, typename Mat>
+Eigen::VectorXd bdcSvdSolveCompat(const Mat& A, const Eigen::VectorXd& b)
+{
+  return bdcSvdSolveCompat<Options>(A, b, 0);
+}
+} // namespace
+
 bool PIEM::optimize( std::vector<double>& opt )
 {
   if ( !A_ ) initMatrixVec();
@@ -1132,7 +1153,7 @@ bool PIEM::optimize( std::vector<double>& opt )
   Eigen::VectorXd x1 = svd.solve(b1);
 #else
   Eigen::VectorXd x1 =
-    A1.bdcSvd<Eigen::ComputeThinU | Eigen::ComputeThinV>().solve(b1);
+    bdcSvdSolveCompat<Eigen::ComputeThinU | Eigen::ComputeThinV>(A1, b1);
 #endif
 
   for ( int i = 0; i < NUM_VEC-1; ++i )
