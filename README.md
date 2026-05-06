@@ -10,10 +10,10 @@ This software was originally developed in 2005-2006 and was renovated in 2021 so
 
 ## Getting Started
 
-This software is a command-line based application. First you execute "git clone" with with "--recursive" option.
+This software is a command-line based application.
 
 ```
-git clone https://github.com/kanait/mesh2slim.git --recursive
+git clone https://github.com/kanait/mesh2slim.git
 ```
 
 You then execute in mesh2slim directory:
@@ -42,6 +42,12 @@ The following libraries are required for successfully compiling this software.
 
 ### [vecmath-cpp](https://github.com/yuki12/vecmath-cpp)
 ### [Eigen](https://gitlab.com/libeigen/eigen)
+
+On macOS with Homebrew:
+
+```
+brew install eigen
+```
 
 ## Authors
 

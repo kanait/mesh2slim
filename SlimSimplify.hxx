@@ -79,7 +79,7 @@ public:
 
 private:
 
-  // SLIM Tree の構築タイプ (0: 誤差順, 1: レベル順)
+  // SLIM tree construction type (0: error order, 1: level order)
   unsigned short construct_type_;
 
   // SLIM balls created

@@ -1071,7 +1071,7 @@ bool PIEM::optimizeMKL( std::vector<double>& opt )
   double wmax=0.0f;
   for (int k = 1; k < NUM_VEC; ++k )
     {
-      // 計算に失敗
+      // Computation failed
 #if defined(WIN32)
       //if ( std::_isnan( w[k] ) ) return false;
       if ( std::isnan( w[k] ) ) return false;
@@ -1143,7 +1143,7 @@ bool PIEM::optimize( std::vector<double>& opt )
   double wmax=0.0f;
   for (int k = 1; k < NUM_VEC; ++k )
     {
-      // 計算に失敗
+      // Computation failed
 #if defined(WIN32)
       // if ( std::_isnan( w[k] ) ) return false;
       if ( std::isnan( w[k] ) ) return false;
@@ -1199,7 +1199,7 @@ bool PIEM::optimize( std::vector<double>& opt )
   double wmax=0.0f;
   for (int k = 1; k < NUM_VEC; ++k )
     {
-      // 計算に失敗
+      // Computation failed
 #if defined(WIN32)
       // if ( std::_isnan( w[k] ) ) return false;
       if ( std::isnan( w[k] ) ) return false;
@@ -1232,7 +1232,7 @@ bool PIEM::optimize( std::vector<double>& opt )
 /////////////////////////////////////////////////////////////////////////////////////////////////////
 
 //
-// PIEM から A, b, c を作成
+// Build A, b, c from PIEM
 //
 void PIEM::copyPIEMToMatrixVec()
 {

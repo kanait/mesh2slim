@@ -48,7 +48,7 @@ public:
 
   void setPIEMSumArea( PIEM& piem, std::vector<unsigned int> face_list ) {
     
-    // 面積の合計を計算
+    // Compute total face area
     double sum_area = 0.0;
     for ( int i = 0; i < face_list.size(); ++i )
       {
@@ -62,7 +62,7 @@ public:
 
   void setPIEMElements( PIEM& piem, std::vector<unsigned int>& face_list ) {
     
-    // 誤差関数の要素の計算
+    // Accumulate error metric elements
     for ( int i = 0; i < face_list.size(); ++i )
       {
 	unsigned int face_id = face_list[i];
@@ -92,7 +92,7 @@ public:
   };
 
 
-  // PIEM の和算で陰関数の係数を計算
+  // Compute basis-function coefficients by summing PIEMs
   double optimize( PIEM* piemA, PIEM* piemB, 
 		   const Point3d& centerA, const Point3d& centerB, 
 		   Point3d& center, 
@@ -105,19 +105,18 @@ public:
 
     piem().add( *piemA, *piemB );
     
-    // サポート中心，半径の計算 (二つの子供の中心と半径により計算)
+    // Compute center and radius (from the two child balls)
     calcCenterRadius( centerA, centerB, center, 
 		      radiusA, radiusB, radius );
 
-    // 陰関数の係数の計算 (PIEM を使って)
-    // グローバル座標で計算
+    // Compute basis-function coefficients (using PIEM) in global coordinates
     std::vector<double> coeff_global( QUADRATIC_COEFF );
     
     if ( optimizeBasisFunction( coeff_global ) == false )
       {
 	cout << "Warning: optimization failed. " << endl;
 
-	// 係数の計算に失敗した場合，子供の係数を足して２で割る
+	// If optimization fails, average the child coefficients
 	std::vector<double> coeffA_global( QUADRATIC_COEFF );
 	std::vector<double> coeffB_global( QUADRATIC_COEFF );
 	toGlobalCoord( quadA.coeffs(), centerA, coeffA_global );
@@ -127,13 +126,13 @@ public:
     
     double error = piem().error( coeff_global );
 
-    // 係数を局所座標系に変換
+    // Convert coefficients to local coordinates
     toLocalCoord( coeff_global, center, coeff );
     
     return error;
   }
 
-  // on-the-fly で陰関数の係数を計算
+  // Compute basis-function coefficients on-the-fly
   double optimize( std::vector<unsigned int> face_list, 
 		   const Point3d& centerA, const Point3d& centerB, 
 		   Point3d& center, 
@@ -144,19 +143,19 @@ public:
     
     if ( !piem_ ) createPIEM();
 
-    // サポート中心，半径の計算 (二つの子供の中心と半径により計算)
+    // Compute center and radius (from the two child balls)
     calcCenterRadius( centerA, centerB, center, 
 		      radiusA, radiusB, radius );
 //     calcCenterRadius( face_list, center, radius );
 
-    // グローバル座標で計算
+    // Compute in global coordinates
     std::vector<double> coeff_global( QUADRATIC_COEFF );
 
     if ( optimizeBasisFunction( face_list, coeff_global ) == false )
       {
 	cout << "Warning: optimization failed. " << endl;
 
-	// 係数の計算に失敗した場合，子供の係数を足して２で割る
+	// If optimization fails, average the child coefficients
 	std::vector<double> coeffA_global( QUADRATIC_COEFF );
 	std::vector<double> coeffB_global( QUADRATIC_COEFF );
 	toGlobalCoord( quadA.coeffs(), centerA, coeffA_global );
@@ -167,13 +166,13 @@ public:
     
     double error = piem().error( coeff_global );
 
-    // 係数を局所座標系に変換
+    // Convert coefficients to local coordinates
     toLocalCoord( coeff_global, center, coeff );
     
     return error;
   };
 
-  // サポート中心，半径の計算（子供の中心，半径より）
+  // Compute center and radius (from child centers and radii)
   void calcCenterRadius( const Point3d& centerA, const Point3d& centerB, 
 			 Point3d& center, 
 			 double radiusA, double radiusB, 
@@ -209,7 +208,7 @@ public:
   };
 
 
-  // サポート中心，半径の計算（面リストより）
+  // Compute center and radius (from face list)
   void calcCenterRadius( std::vector<unsigned int>& face_list, 
 			 Point3d& center, double* radius ) {
 
@@ -217,7 +216,7 @@ public:
     std::vector<double>& points = mesh().points();
     std::vector<double>& fnormals = mesh().fnormals();
 
-    // 三角形の重心の平均より計算
+    // Use the average of triangle barycenters
     center.set( .0, .0, .0 );
     for ( int i = 0; i < face_list.size(); ++i )
       {
@@ -231,7 +230,7 @@ public:
       }
     center.scale( 1.0 / (double) face_list.size() );
     
-    // center と三角形の距離の最大 = radius
+    // radius = max distance from center to triangles
     
     *radius = 0.0;
     int c = 0;
@@ -292,17 +291,17 @@ public:
       }
   };
 
-  // 一つの面から係数を計算（ポリゴンの面を Slimball に変換するときに利用）
+  // Compute coefficients from a single face (used when converting a polygon face to a SlimBall)
   void createBasisFunction( unsigned int face_id, std::vector<double>& coeff ) {
     
-    // p0 しか使わない
+    // Only p0 is needed here
     Point3d p0, p1, p2;
     mesh().getFacePoints( face_id, p0, p1, p2 );
 
     Vector3d nrm;
     mesh().fnormal( face_id, nrm );
     
-    // ポリゴンの平面を陰関数表現にする
+    // Represent the polygon plane as an implicit function
     coeff[0] = 0.0;
     coeff[1] = 0.0;
     coeff[2] = 0.0;
@@ -316,15 +315,13 @@ public:
 
   };
 
-  // PIEM で計算
-  // 係数: グローバル座標で計算
+  // Compute with PIEM (coefficients are computed in global coordinates)
   bool optimizeBasisFunction( std::vector<double>& coeff ) {
     PIEM& pi = piem();
     return pi.optimize( coeff );
   };
 
-  // on-the-fly で計算
-  // 係数: グローバル座標で計算
+  // Compute on-the-fly (coefficients are computed in global coordinates)
   bool optimizeBasisFunction( std::vector<unsigned int>& face_list,
 			      std::vector<double>& coeff ) {
     PIEM& pi = piem();

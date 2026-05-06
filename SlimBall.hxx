@@ -99,7 +99,7 @@ public:
 
   }
 
-  // p は絶対座標
+  // p is in global (absolute) coordinates
   T weight( Point3<T>& p ) const {
 
     T d = p.distanceSquared( center_ );

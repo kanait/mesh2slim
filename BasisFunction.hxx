@@ -41,7 +41,7 @@ public:
   BasisFunction(){};
   virtual ~BasisFunction(){};
 
-  // p は相対座標
+  // p is in local (relative) coordinates
   T poly( Point3<T>& p ) const {
     return poly_( p.x, p.y, p.z );
   };

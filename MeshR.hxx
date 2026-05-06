@@ -237,7 +237,7 @@ public:
     m[2] = (int) ( (float) face_mates_[ TRIANGLE * face_id + 2 ] / 3.0f );
   };
 
-  // 縮退チェック機能付
+  // Degenerate-face check
   bool checkFaceNormal( const unsigned int face_id ) {
 
     Point3<T> p0;
@@ -460,7 +460,7 @@ public:
     // multimap< id0, pair< id1, fid > >
     std::multimap< unsigned int, std::pair< unsigned int, unsigned int> > indices_pair;
 
-    // 領域の確保
+    // Allocate storage
     face_mates_.resize( indices_.size() );
 
     for( int i = 0; i < indices_.size(); i += TRIANGLE )
@@ -492,7 +492,7 @@ public:
 	    unsigned int id0 = indices_[ i + j ];
 	    unsigned int id1 = ( j != 2 ) ? indices_[ i + (j + 1) ] : indices_[ i ];
 
-	    // id1 をキーとする pair を見つける
+	    // Find pairs keyed by id1
 	    std::pair< type_upIter, type_upIter > cIterPair
 	      = indices_pair.equal_range( id1 );
 	  
@@ -500,7 +500,7 @@ public:
 	    bool found = false;
 	    for ( type_upIter cIter = cIterPair.first; cIter != cIterPair.second; ++cIter )
 	      {
-		// pair のうち 最初のキーが id0 のものを見つける
+		// Find the pair whose first key matches id0
 		if ( (*cIter).second.first == id0 ) // found!
 		  {
 		    found = true;
@@ -523,7 +523,7 @@ public:
       }
 
 #if 1
-    // メイトの作成
+    // Create face mates
     std::cout << "create face mates ... " << std::endl;
   
     for( int i = 0; i < indices_.size(); i += TRIANGLE )
@@ -533,14 +533,14 @@ public:
 	    unsigned int id0 = indices_[ i + j ];
 	    unsigned int id1 = ( j != 2 ) ? indices_[ i + (j + 1) ] : indices_[ i ];
 
-	    // id1 をキーとする pair を見つける
+	    // Find pairs keyed by id1
 	    std::pair< type_upIter, type_upIter > cIterPair
 	      = indices_pair.equal_range( id1 );
 	  
 	    face_mates_[ i + j ] = -1;
 	    for ( type_upIter cIter = cIterPair.first; cIter != cIterPair.second; ++cIter )
 	      {
-		// pair のうち 最初のキーが id0 のものを見つける
+		// Find the pair whose first key matches id0
 		if ( (*cIter).second.first == id0 ) // found!
 		  {
 		    face_mates_[ i + j ] = (*cIter).second.second;

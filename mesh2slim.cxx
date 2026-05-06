@@ -69,7 +69,7 @@ int main( int argc, char* argv[] )
 
 #if 0
   //
-  // ランダム点を読み込んで誤差測定
+  // Measure error using sampled points from a file
   //
   for ( int k = 0; k < 3; ++k )
     {
@@ -146,7 +146,7 @@ int main( int argc, char* argv[] )
 
 #if 0
   //
-  // ランダム点発生
+  // Generate random points on the mesh
   //
 #define RAN_NUM 10
 
@@ -154,7 +154,7 @@ int main( int argc, char* argv[] )
 
   FILE* fp = fopen("tmp.pnt", "w");
 
-  // 法線の生成
+  // Generate face normals
   meshR.createFaceNormals();
 
   for ( int i = 0; i < meshR.numFaces(); ++i )
@@ -188,7 +188,7 @@ int main( int argc, char* argv[] )
 
 #if 0
   //
-  // メッシュ上の頂点を使って誤差測定
+  // Measure error using mesh vertices
   //
   double error = 0.0001;
 

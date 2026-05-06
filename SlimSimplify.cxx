@@ -23,7 +23,7 @@ void SlimSimplify::apply()
 
   initialize();
   
-  // メッシュの面を陰関数に変換
+  // ???b?V???????A???????
   polyToSlimBall();
 
   setPQ();
@@ -41,31 +41,31 @@ void SlimSimplify::initialize()
 {
   cout << "initialize ... " << endl;
 
-  // Face の面法線の作成
+  // Face ???@?????
   mesh().createFaceNormals( true );
 
-  // Face の面の面積の作成
+  // Face ????????
   mesh().createFaceAreas();
 
-  // Face のメイトの作成
+  // Face ????C?g???
   if ( mesh().face_mates().empty() )
     mesh().createFaceMates();
 
-  // Dual Graph の作成
+  // Dual Graph ???
   dg_.setMesh( mesh() );
   dg_.createDG();
 
-  // 縮退した面のノードを削除する
+  // ?k????????m?[?h????????
   dg_.checkDG();
 
-  // Face メイトはもういらないから削除
+  // Face ???C?g????????????????
   mesh().clearFaceMates();
 
   cout << "initialize done. " << endl;
 }
 
 //
-// ポリゴンの面を Slimball に変換
+// ?|???S?????? Slimball ????
 //
 void SlimSimplify::polyToSlimBall()
 {
@@ -76,24 +76,24 @@ void SlimSimplify::polyToSlimBall()
       DGNode* node = nodes[i];
       if ( node->isDeleted() ) continue;
 
-      // SlimBall の作成
+      // SlimBall ???
       SlimBalld* slimball = createSlimBall();
       
-      // DGNode に SlimBall を追加
+      // DGNode ?? SlimBall ????
       node->setSlimBall( slimball );
 
       PIEMHandler piem_handle( mesh() );
 
-      // サポートの中心と半径を計算
+      // ?T?|?[?g????S????a???v?Z
       Point3d center;
       double radius;
       std::vector<unsigned int>& face_list = node->face_list();
       piem_handle.calcCenterRadius( face_list, center, &radius );
 
-      // 二次関数の係数を計算
+      // ??????W?????v?Z
       Quadraticd* quad = new Quadraticd;
       std::vector<double> coeff_global( QUADRATIC_COEFF );
-      // Mesh の面は一つしか登録されていないはず
+      // Mesh ??????????o?^????????????
       unsigned int face_id = face_list[0];
       piem_handle.createBasisFunction( face_id, coeff_global );
       piem_handle.toLocalCoord( coeff_global, center, quad->coeffs() );
@@ -108,12 +108,12 @@ void SlimSimplify::polyToSlimBall()
 	   << " " << quad->poly( p2sub ) << endl;
 #endif
 
-      // 登録
+      // ?o?^
       slimball->setCenter( center );
       slimball->setSupport( radius );
       slimball->addBasisFunction( *quad );
 
-      // 誤差を登録しておく
+      // ????o?^???????
       slimball->setUserDefined( 0.0 );
     }
   cout << "convert original polygons to slimballs done. " << endl;
@@ -124,13 +124,13 @@ double SlimSimplify::optimize( DGEdge* edge, bool isUpdate )
   if ( edge->slimball() ) edge->deleteSlimBall();
   if ( edge->piem() ) edge->deletePIEM();
   
-  // SlimBall の作成
+  // SlimBall ???
   SlimBalld* slimball = new SlimBalld;
       
-  // PIEM の作成
+  // PIEM ???
   PIEM* piem = new PIEM;
 
-  // 両端のノードから face list を取得
+  // Get the face list from both endpoint nodes
   std::vector<unsigned int> face_list;
   DGNode* sn = edge->sn();
   std::vector<unsigned int>& sfl = sn->face_list();
@@ -141,7 +141,7 @@ double SlimSimplify::optimize( DGEdge* edge, bool isUpdate )
 
 //       cout << "face_list " << face_list.size() << endl;
 
-  // PIEM による最適関数の計算
+  // PIEM ?????K?????v?Z
 
   PIEMHandler piem_handle( mesh() );
   piem_handle.setPIEM( *piem );
@@ -178,17 +178,17 @@ double SlimSimplify::optimize( DGEdge* edge, bool isUpdate )
 				    quad->coeffs() );
     }
 
-  // crease のときは誤差関数値を 1000 倍にする
+  // crease ???????????l?? 1000 ?{?????
 //   if ( edge->isCrease() == true ) error *= 1000.0;
   if ( edge->isCrease() == true ) error *= CREASE_WEIGHT;
       
   slimball->setCenter( center );
   slimball->setSupport( radius );
   slimball->addBasisFunction( *quad );
-  // 誤差を登録しておく
+  // ????o?^???????
   slimball->setUserDefined( error );
 
-  // update の中で使われる時以外は slimball を消去する
+  // Delete SlimBall unless it is needed for an update pass
   if ( isUpdate == false )
     {
       delete slimball; slimball = NULL;
@@ -205,7 +205,7 @@ double SlimSimplify::optimize( DGEdge* edge, bool isUpdate )
   return error;
 }
 
-// 頂点のノードに PIEM を作成
+// Create PIEM for vertex nodes
 void SlimSimplify::createNodePIEMs()
 {
   cout << "create node PIEMs ... " << endl;
@@ -219,7 +219,7 @@ void SlimSimplify::createNodePIEMs()
       SlimBalld* slimball = node->slimball();
       node->setPIEM( piem_handle.createPIEM( node->face_list() ) );
 
-      // ノードの face_list はもういらない（はず）なので消去
+      // Face list should no longer be needed after PIEM creation
       node->deleteFaceList();
     }
   cout << "create node PIEMs done. " << endl;
@@ -229,7 +229,7 @@ void SlimSimplify::setPQ()
 {
   cout << "create priority queue ... " << endl;
 
-  // queue の初期化
+  // queue ???????
   pq_.init( dg_.edges().size() );
 
 //   cout << " isStorePIEM " << isStorePIEM() << endl;
@@ -238,7 +238,7 @@ void SlimSimplify::setPQ()
       createNodePIEMs();
     }
 
-  // MeshDG のエッジから PQ のノードを作成
+  // MeshDG ??G?b?W???? PQ ??m?[?h????
   for ( int k = 0; k < dg_.edges().size(); ++k )
     {
       DGEdge* edge = dg_.edge(k);
@@ -248,7 +248,7 @@ void SlimSimplify::setPQ()
       
 //       cout << "edge " << k << " error " << error << endl;
 
-      // PQ ノードの作成
+      // PQ ?m?[?h???
       PQNoded pqnode( k, error );
       pq_.insert( pqnode );
     }
@@ -263,12 +263,12 @@ void SlimSimplify::update( DGEdge* edge )
   optimize( edge, true );
 //     }
 
-  // slimball をリストに追加
+  // slimball ?????X?g????
   addSlimBall( edge->slimball() );
 
 //   edge->slimball()->print();
 
-  // SlimBall の親子関係の構築
+  // SlimBall ??e?q??W??\?z
   DGNode* sn = edge->sn();
   if ( sn->slimball() )
     {
@@ -283,24 +283,24 @@ void SlimSimplify::update( DGEdge* edge )
       edge->slimball()->addChild( en->slimball() );
     }
 
-  // エッジの slimball と PIEM を sn に引き継ぐ
-  // sn にもともと付いている PIEM は消去, slimball はリンクを切る
+  // ?G?b?W?? slimball ?? PIEM ?? sn ??????p??
+  // sn ????????t??????? PIEM ?????, slimball ??????N????
   
   sn->setSlimBall( edge->slimball() );
   
   sn->deletePIEM();
   sn->setPIEM( edge->piem() );
 
-  // 引継ぎ終わったので NULL にしておく
+  // ???p???I???????? NULL ????????
   edge->setSlimBall( NULL );
   edge->setPIEM( NULL );
 
-  // en の face_list と edges を sn に追加
+  // en ?? face_list ?? edges ?? sn ????
   sn->add( en, edge );
 
 //   cout << "\t new node ... num of faces: " << sn->face_list().size() << endl;
 
-  // en と edge を clear
+  // en ?? edge ?? clear
   en->clear();
   edge->clear( 1 );
 }
@@ -331,8 +331,8 @@ void SlimSimplify::simplify()
       if ( !(count % 1000) )
 	cout << "count " << count << "/" << num_faces << " min_id " << min_id << " min_error " << min_error << endl;
 
-      // 処理すべきノードのサイズが もとの面のサイズの 1/10 になったら
-      // PIEM 保存に切り替える
+      // ??????????m?[?h??T?C?Y?? ???????T?C?Y?? 1/10 ????????
+      // PIEM ???????????
 //       cout << "tmp " << slimballs_.size() - mesh().numFaces() << endl;
       if ( ( count > num_faces * .9 ) && ( changeNodeStoreType == false ) && ( isStorePIEM() == false) )
 	{
@@ -345,14 +345,14 @@ void SlimSimplify::simplify()
 
       update( edge );
 
-      // ノードに隣接するエッジの slimball と PIEM をアップデート
+      // ?m?[?h???????G?b?W?? slimball ?? PIEM ???A?b?v?f?[?g
       std::vector<DGEdge*> edges = sn->edges();
       for ( int i = 0; i < edges.size(); ++i )
 	{
 	  DGEdge* ne = edges[i];
 	  if ( ne->isDeleted() ) continue;
 
-	  // slimball と PIEM をアップデート
+	  // slimball ?? PIEM ???A?b?v?f?[?g
 	  double error = optimize( ne, false );
 	  PQNoded pqnode( ne->id(), error );
 	  pq_.update( ne->id(), pqnode );
@@ -362,7 +362,7 @@ void SlimSimplify::simplify()
   cout << "simplification done. " << endl;
 }
 
-// slimball の並び替え
+// Reorder SlimBalls
 void SlimSimplify::toSlimTree()
 {
   cout << "construct SlimTree ... " << endl;
@@ -376,7 +376,7 @@ void SlimSimplify::toSlimTree()
     }
   else if ( construct_type_ == SLIM_LEVEL )
     {
-      // level 0 の slimball を取得
+      // Collect SlimBalls at level 0 (roots)
       //std::vector<SlimBall*> slim_level;
 
       int level = 0;
@@ -405,7 +405,7 @@ void SlimSimplify::toSlimTree()
 	      std::vector<SlimBalld*>& childs = slimball->childs();
 	      for ( int j = 0; j < childs.size(); ++j )
 		{
-		  // 葉ノードを保存しない場合は次の行をコメントアウトする
+		  // ?t?m?[?h????????????????s???R?????g?A?E?g????
 // 		  if ( childs[j]->childs().size() )
 
 		  slimtree().setSlimBall( childs[j] ); 

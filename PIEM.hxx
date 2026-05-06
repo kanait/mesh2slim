@@ -109,7 +109,7 @@ public:
   void addPIEMElementsNormB( Point3d&, Point3d&, Point3d&, Vector3d& );
   void addPIEMElementsNormC( Vector3d& );
 
-  // PIEM から A, b, c を作成
+  // Build A, b, c from PIEM
   void copyPIEMToMatrixVec();
 
   void initMatrixVec() {

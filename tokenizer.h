@@ -96,32 +96,32 @@ class tokenizer {
 };
 
 // sample
-// "apple,banana,cherry" を "," で区切る
+// Split "apple,banana,cherry" by ","
 //stx::tokenizer<string> tok("apple,banana,cherry", ",");
 //while ( !tok.empty() ) {
 //  cout << tok.next() << " ";
 //}
 //cout << endl;
-//tokenizer (コンストラクタ)
+// tokenizer (constructor)
      
 // tokenizer::tokenizer(const String& str, const String& del, bool ret)
 //   : cur_(0), str_(str), del_(del), ret_(ret) {}
-/*  str:トークン分割対象となる文字列 */
-/*  del:トークンを区切る文字の集合 */
-/*  ret:区切り文字をトークンとして扱うならtrue */
-/*  ret == true のとき、区切り文字をトークンとして扱います。 */
-/*  たとえば、  */
+/*  str: input string to tokenize */
+/*  del: set of delimiter characters */
+/*  ret: true to return delimiters as tokens */
+/*  If ret == true, delimiters are also returned as tokens. */
+/*  For example: */
 
 // sample
-// "apple_banana__cherry_" を "_" で区切る
+// Split "apple_banana__cherry_" by "_"
 /*  bool ret = false; */
 /*  stx::tokenizer<string> tok("apple_banana__cherry_", "_", ret); */
 /*  while ( !tok.empty() ) { */
 /*    cout << tok.next() << " "; */
 /*  } */
 /*  cout << endl; */
-/*  では "apple", "banana", "cherry" が切り出されますが、ret = true とすると、 */
-/*  "apple", "_", "banana", "_", "_", "cherry", "_" が切り出されます。  */
+/*  This extracts: "apple", "banana", "cherry". If ret = true, it extracts: */
+/*  "apple", "_", "banana", "_", "_", "cherry", "_". */
 /*  skip (private) */
      
 // void tokenizer::skip() {
@@ -140,14 +140,14 @@ class tokenizer {
 //   return cur_ == String::npos;
 // }
 
-/*  切り出すトークンが見つからないとき true を返します。  */
+/*  Returns true when no more tokens are available. */
 
 /*  next */
 // String tokenizer::next() {
 //   range_type range = next_range();
 //   return str_.substr(range.first, range.second);
 // }
-/*  切り出されたトークンを返します。  */
+/*  Returns the next extracted token. */
 
 
 /*  next_range */
@@ -162,9 +162,9 @@ class tokenizer {
 //   return range_type(start,cur_-start);
 // }
 
-/*  トークンを切り出し、その位置と長さを表す */
-/*  std::pair<String::size_type,String::size_type> rangeを返します。 */
-/*  range.first はトークンの開始位置、range.second はトークンの長さです。  */
+/*  Extracts the next token and returns its range (position and length). */
+/*  Returns std::pair<String::size_type,String::size_type> range. */
+/*  range.first is the token start position, range.second is the token length. */
 
 /*  set_str */
 
@@ -173,8 +173,8 @@ class tokenizer {
 //   cur_ = 0;
 // }
 
-/*  トークン分割対象となる文字列を設定します。 */
-/*  トークン分割の開始位置を0に設定します。  */
+/*  Sets the input string to tokenize. */
+/*  Resets the current position to 0. */
 
 /*  set_delimiter */
 
@@ -183,8 +183,8 @@ class tokenizer {
 //   ret_ = ret;
 // }
 
-/*  区切り文字の集合を設定します。 */
-/*  区切り文字をトークンとして扱うときは第2引数を true としてください。  */
+/*  Sets the delimiter character set. */
+/*  Set the second argument to true to treat delimiters as tokens. */
 
 /*  count */
 
@@ -207,11 +207,11 @@ class tokenizer {
 //   return count;
 // }
 
-/*  現在の位置から切り出されるトークンの数を返します。 */
+/*  Returns the number of tokens available from the current position. */
 
 /*  string_tokenizer / wstring_tokenizer */
 
-/*  使用頻度の多いtokenizer<std::string>およびtokenizer<std::wstring>をそれぞれ */
-/*  string_tokenizer,wstring_tokenizerとtypedefしました。  */
+/*  Commonly used tokenizer<std::string> and tokenizer<std::wstring> are typedef'ed */
+/*  as string_tokenizer and wstring_tokenizer, respectively. */
 
 #endif // TOKENIZER_H

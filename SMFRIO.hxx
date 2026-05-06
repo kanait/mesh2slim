@@ -162,7 +162,7 @@ public:
 #if 1
 	    char dummy[BUFSIZ];
 	    char xc[BUFSIZ], yc[BUFSIZ], zc[BUFSIZ];
-	    sscanf( cline.c_str(), "%s%s%s%s", &dummy, &xc, &yc, &zc );
+	    sscanf( cline.c_str(), "%1023s%1023s%1023s%1023s", dummy, xc, yc, zc );
 	    T x = atof( xc );
 	    T y = atof( yc );
 	    T z = atof( zc );
@@ -188,7 +188,7 @@ public:
 #if 1
 	    char dummy[BUFSIZ];
 	    char xc[BUFSIZ], yc[BUFSIZ], zc[BUFSIZ];
-	    sscanf( cline.c_str(), "%s%s%s%s", &dummy, &xc, &yc, &zc );
+	    sscanf( cline.c_str(), "%1023s%1023s%1023s%1023s", dummy, xc, yc, zc );
 	    T x = atof( xc );
 	    T y = atof( yc );
 	    T z = atof( zc );
@@ -206,14 +206,14 @@ public:
 	    T x, y, z;
 	    if ( RIO<T>::mesh().n_tex() == 2 )
 	      {
-		sscanf( cline.c_str(), "%s%s%s", &dummy, &xc, &yc );
+		sscanf( cline.c_str(), "%1023s%1023s%1023s", dummy, xc, yc );
 		x = atof( xc );
 		y = atof( yc );
 		RIO<T>::mesh().setTexcoord( r_id, x, y );
 	      }
 	    else if ( RIO<T>::mesh().n_tex() == 3 )
 	      {
-		sscanf( cline.c_str(), "%s%s%s%s", &dummy, &xc, &yc, &zc );
+		sscanf( cline.c_str(), "%1023s%1023s%1023s%1023s", dummy, xc, yc, zc );
 		x = atof( xc );
 		y = atof( yc );
 		z = atof( zc );
@@ -238,7 +238,7 @@ public:
 	  {
 	    char dummy[BUFSIZ];
 	    char xc[BUFSIZ], yc[BUFSIZ], zc[BUFSIZ];
-	    sscanf( cline.c_str(), "%s%s%s%s", &dummy, &xc, &yc, &zc );
+	    sscanf( cline.c_str(), "%1023s%1023s%1023s%1023s", dummy, xc, yc, zc );
 	    T x = atof( xc );
 	    T y = atof( yc );
 	    T z = atof( zc );
@@ -252,7 +252,7 @@ public:
 	  {
 	    char dummy[BUFSIZ];
 	    char ids[BUFSIZ];
-	    sscanf( cline.c_str(), "%s%s", &dummy, &ids );
+	    sscanf( cline.c_str(), "%1023s%1023s", dummy, ids );
 	    unsigned int id = atoi( ids );
 
 	    RIO<T>::mesh().setColorId( cf_id, id );
@@ -296,7 +296,7 @@ public:
 	      {
 		char dummy[BUFSIZ];
 		char xc[BUFSIZ], yc[BUFSIZ], zc[BUFSIZ];
-		sscanf( cline.c_str(), "%s%s%s%s", &dummy, &xc, &yc, &zc );
+		sscanf( cline.c_str(), "%1023s%1023s%1023s%1023s", dummy, xc, yc, zc );
 		unsigned int id0 = atoi( xc ) - 1;
 		unsigned int id1 = atoi( yc ) - 1;
 		unsigned int id2 = atoi( zc ) - 1;
@@ -309,7 +309,7 @@ public:
 	  {
 	    char dummy[BUFSIZ];
 	    char xc[BUFSIZ], yc[BUFSIZ], zc[BUFSIZ];
-	    sscanf( cline.c_str(), "%s%s%s%s", &dummy, &xc, &yc, &zc );
+	    sscanf( cline.c_str(), "%1023s%1023s%1023s%1023s", dummy, xc, yc, zc );
 	    unsigned int id0 = atoi( xc ) - 1;
 	    unsigned int id1 = atoi( yc ) - 1;
 	    unsigned int id2 = atoi( zc ) - 1;

@@ -82,19 +82,19 @@ public:
 	  {
 	    int num_param = 3 + 1 + QUADRATIC_COEFF + 1 + num_user_defined;
 	    
-	    // 一旦 float で読み込んで，あとで T に変換する
+	    // Read as float first, then convert to T
 	    std::vector<float> cc( num_param );
 
 	    std::fread( &cc[0], sizeof(float), num_param, in );
 
-	    // float から T に変換
+	    // Convert float -> T
 	    std::vector<T> c( num_param );
 	    for ( int j = 0; j < num_param; ++j ) c[j] = (T) cc[j];
 
 	    // center
 	    slimball->setCenter( c[0], c[1], c[2] );
 	    
-	    // 多項式の係数
+	    // Polynomial coefficients
 	    Quadratic<T>* bf = new Quadratic<T>;
 	    bf->setCoeffs( c );
 	    slimball->addBasisFunction( *bf );
@@ -212,11 +212,11 @@ public:
 	    // parents (14)
 	    c[14] = ( slimballs[i]->parent() ) ? slimballs[i]->parent()->id() : -1;
 
-	    // ユーザ定義変数 (15-)
+	    // User-defined values (15-)
 	    std::vector<T>& ud = slimballs[i]->userDefineds();
 	    for ( int j = 0; j < ud.size(); ++j ) c[15+j] = ud[j];
 
-	    // float へ変換
+	    // Convert to float
 	    std::vector<float> cc( num_param );
 	    for ( int k = 0; k < num_param; ++k )
 	      {

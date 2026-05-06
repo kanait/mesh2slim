@@ -143,7 +143,7 @@ public:
     count++;
 
     if (count >= display_interval) {
-      sprintf(buf, "FPS: %f", display_interval / elapsed_time);
+      snprintf(buf, sizeof(buf), "FPS: %f", display_interval / elapsed_time);
       printf("FPS = %f\n", display_interval / elapsed_time);
 	  
       count        = 0;

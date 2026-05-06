@@ -190,8 +190,8 @@ public:
     for ( int i = 0; i < edges_.size(); ++i )
       {
 	if ( edges_[i]->isDeleted() ) continue;
-	if ( (edges_[i]->sn() == this) && (edges_[i]->en() == node) ||
-	     (edges_[i]->sn() == node) && (edges_[i]->en() == this) )
+	if ( ((edges_[i]->sn() == this) && (edges_[i]->en() == node)) ||
+	     ((edges_[i]->sn() == node) && (edges_[i]->en() == this)) )
 	  return edges_[i];
       }
     return NULL;
