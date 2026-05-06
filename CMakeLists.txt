@@ -9,6 +9,7 @@ SET(CMAKE_C_COMPILER_WORKS 1 CACHE INTERNAL "")
 SET(CMAKE_CXX_COMPILER_WORKS 1 CACHE INTERNAL "")
 
 option(USE_SYSTEM_EIGEN "Prefer Eigen from system (Homebrew, etc.)" ON)
+option(PIEM_USE_JACOBI_SVD "Use JacobiSVD instead of BDCSVD (Eigen)" OFF)
 
 add_executable( mesh2slim
                 BasisFunction.hxx
@@ -59,6 +60,10 @@ elseif (EIGEN3_INCLUDE_DIR)
 else()
   message(STATUS "Eigen3 not found via find_package(); falling back to external/eigen")
   target_include_directories(mesh2slim PUBLIC ${PROJECT_SOURCE_DIR}/external/eigen)
+endif()
+
+if (PIEM_USE_JACOBI_SVD)
+  target_compile_definitions(mesh2slim PUBLIC PIEM_USE_JACOBI_SVD=1)
 endif()
 
 target_compile_options( mesh2slim PUBLIC -O3 -Wall)

@@ -1127,12 +1127,12 @@ bool PIEM::optimize( std::vector<double>& opt )
       b1[i-1] = b_[i];
     }
 
-#if 0
-  Eigen::JacobiSVD<Eigen::MatrixXd> svd(A1, Eigen::ComputeFullU | Eigen::ComputeFullV);
+#if defined(PIEM_USE_JACOBI_SVD)
+  Eigen::JacobiSVD<Eigen::MatrixXd> svd(A1, Eigen::ComputeThinU | Eigen::ComputeThinV);
   Eigen::VectorXd x1 = svd.solve(b1);
-#endif
-#if 1
-  Eigen::VectorXd x1 = A1.bdcSvd( Eigen::ComputeThinU | Eigen::ComputeThinV ).solve(b1);
+#else
+  Eigen::VectorXd x1 =
+    A1.bdcSvd<Eigen::ComputeThinU | Eigen::ComputeThinV>().solve(b1);
 #endif
 
   for ( int i = 0; i < NUM_VEC-1; ++i )
